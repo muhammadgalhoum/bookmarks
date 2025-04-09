@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}{{ image.title }}{% endblock %}
+{% block content %}
+    {% if request.user in image.user.followers.all or request.user == image.user %}
+    <h1>
+        {{ image.title }}
+        {% if request.user == image.user %}
+            <a href="
+                {% url 'images:image_update' image.created.year image.created.month image.created.day image.slug %}" class="button">
+                Edit
+            </a>
+        {% endif %}
+    </h1>
+        <a href="{{ image.image.url }}">
+            <img src="{% thumbnail image.image 300x0 quality=100 %}" 
+                class="image-detail" title="{{ image.title }}" alt="{{ image.title }}">
+        </a>
+        {% with total_likes=image.liked_by.count image_likes=image.liked_by.all %}
+            <div class="image-info">
+                <div>
+                    <span class="count">
+                        <span class="total">{{ total_likes }}</span>
+                        like{{ total_likes|pluralize }}
+                    </span>
+                     <span class="count">
+                        {{ total_views }} view{{ total_views|pluralize }}
+                    </span>
+                    <a href="#" data-id="{{ image.id }}" 
+                        data-action="{% if request.user in image_likes %}un{% endif %}like"
+                        class="like button">
+                        {% if request.user not in image_likes %}
+                            Like
+                        {% else %}
+                            Unlike
+                        {% endif %}
+                    </a>
+                </div>
+                {{ image.description|linebreaks }}
+                <p>
+                    By <a href="{{image.user.get_absolute_url}}">
+                        {{ image.user.get_fullname|default:image.user.username }}
+                    </a>
+                </p>
+            </div>
+            <div class="image-likes">
+                {% for user in image.liked_by.all %}
+                    <div>
+                        {% if user.photo %}
+                            <img src="{{ user.photo.url }}" class="avatar" 
+                                alt="{{ user.username }}'s profile picture" title="{{ user.username }}'s profile picture">
+                        {% endif %}
+                        <p><a href="{% url 'account:user_detail' user.slug user.uuid %}">{{ user.first_name }}</a></p>
+                    </div>
+                {% empty %}
+                    Nobody likes this image yet.
+                {% endfor %}
+            </div>
+        {% endwith %}
+    {% else %}
+        <p>You don't have permsion to see this Image</p>
+    {% endif %}
+{% endblock %}
+{% block domready %}
+    const url = '{% url "images:like" %}';
+    var options = {
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    mode: 'same-origin'
+    }
+    document.querySelector('a.like').addEventListener('click', function(e){
+        e.preventDefault();
+        var likeButton = this;
+        // add request body
+        var formData = new FormData();
+        formData.append('id', likeButton.dataset.id);
+        formData.append('action', likeButton.dataset.action);
+        options['body'] = formData;
+        // send HTTP request
+        fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'ok')
+            {
+                var previousAction = likeButton.dataset.action;
+                // toggle button text and data-action
+                var action = previousAction === 'like' ? 'unlike' : 'like';
+                likeButton.dataset.action = action;
+                likeButton.innerHTML = action;
+                // update like count
+                var likeCount = document.querySelector('span.count .total');
+                var totalLikes = parseInt(likeCount.innerHTML);
+                likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;
+            }
+        })
+    });
+ {% endblock %}

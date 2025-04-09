@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}
+    {% if is_update %}
+        Edit Image
+    {% else %}
+        Bookmark an Image
+    {% endif %}
+{% endblock %}
+{% block content %}
+     <h1>
+        {% if is_update %}
+            Edit Your Image
+        {% else %}
+            Bookmark an Image
+        {% endif %}
+    </h1>
+    {% if request.GET.url %}
+        <img src="{{ request.GET.url }}" class="image-preview">
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if is_update %}
+            <input type="submit" value="Edit Image">
+        {% else %}
+            <input type="submit" value="Bookmark it!">
+        {% endif %}
+        
+    </form>
+{% endblock %}

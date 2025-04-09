@@ -1,0 +1,15 @@
+.vscode
+env
+.env
+bookmark/__pycache__/
+account/__pycache__/
+account/migrations/
+actions/__pycache__/
+actions/migrations/
+images/__pycache__/
+images/migrations/
+media/
+cert.crt
+cert.key
+db.sqlite3
+django.log

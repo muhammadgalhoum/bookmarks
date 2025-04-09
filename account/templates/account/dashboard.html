@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block meta_title %}Dashboard{% endblock %}
+{% block meta_description %}Your personal dashboard with image bookmarks and profile settings.{% endblock %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    <h1>Dashboard</h1>
+    {% with total_images_created=request.user.images.count %}
+        <p>
+            Welcome to your dashboard. You have bookmarked {{ total_images_created }}
+            image{{ total_images_created|pluralize }}, and you can see their ranking from
+            <a href="{% url 'images:ranking' %}">here</a>.
+        </p>
+    {% endwith %}
+    <p>
+        Drag the following button to your bookmarks toolbar to bookmark images 
+        from other websites → 
+        <a href="javascript:{% static 'bookmarklet_launcher.js' %}" class="button">Bookmark it</a>
+    </p>
+    <p>
+        You can <a href="{% url 'account:edit' %}">edit your 
+        profile</a> or <a href="{% url 'account:password_change' %}">change your password</a>.
+    </p>
+    {% if actions %}
+        <h2>What's happening</h2>
+        <div id="action-list">
+            {% for action in actions %}
+                {% include "action_detail.html" %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
