@@ -4,8 +4,6 @@ from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, Contact
 from .forms import ContactCreationForm, ContactChangeForm, CustomUserCreationForm, CustomUserChangeForm
 
-# Register your models here.
-
 
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
@@ -69,7 +67,7 @@ class CustomUserAdmin(UserAdmin):
     )
  
     
-# Incase I want to add the Contact modle inside the CustomUser mode 
+# In case of I want to add the Contact modle inside the CustomUser model 
 
 # class ContactInline(admin.TabularInline):
 #     model = Contact

@@ -6,8 +6,6 @@ from django.utils.text import slugify
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 
-# Create your models here.
-
     
 class Contact(models.Model):
     user_from = models.ForeignKey(

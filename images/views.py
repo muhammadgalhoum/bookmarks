@@ -16,7 +16,6 @@ from actions.utils import create_action
 # Connect to redis
 r = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
 
-# Create your views here.
 
 @login_required
 def image_create(request):

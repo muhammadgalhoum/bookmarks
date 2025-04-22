@@ -12,8 +12,6 @@ from .forms import *
 from actions.models import Action
 from actions.utils import create_action
 
-# Create your views here.
-
 
 User = get_user_model()
 

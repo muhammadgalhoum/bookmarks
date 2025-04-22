@@ -3,8 +3,6 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 
-# Create your models here.
-
 
 def user_directory_path(instance, filename):
     return os.path.join(

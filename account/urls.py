@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from .views import *
+from . import views
 # from django.contrib.auth.views import (
 #     LoginView, 
 #     LogoutView, 
@@ -15,13 +15,13 @@ from .views import *
 app_name = 'account'
 
 urlpatterns = [
-    path('', dashboard, name='dashboard'),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('account/register/', register, name='register'),
-    path('account/edit/', edit, name='edit'),
-    path('account/users/', user_list, name='user_list'),
-    path('account/users/follow/', user_follow, name='user_follow'),
-    path('account/users/<slug:slug>-<uuid:uuid>/',user_detail, name='user_detail'),
+    path('', views.dashboard, name='dashboard'),
+    path('accounts/', views.include('django.contrib.auth.urls')),
+    path('account/register/', views.register, name='register'),
+    path('account/edit/', views.edit, name='edit'),
+    path('account/users/', views.user_list, name='user_list'),
+    path('account/users/follow/', views.user_follow, name='user_follow'),
+    path('account/users/<slug:slug>-<uuid:uuid>/', views.user_detail, name='user_detail'),
 ]
 
 # path('login/', LoginView.as_view(), name='login'),
